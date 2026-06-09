@@ -33,4 +33,23 @@ Route::resource('purchaseorder', PurchaseOrderController::class);
         Route::delete('/{idbarang}',        [DetailPoController::class, 'destroy']) ->name('destroy');
     });
 Route::resource('invoice',       InvoiceController::class);
+Route::middleware(['auth'])->group(function () {
+
+    // Invoice CRUD
+    Route::get('/invoice',                  [InvoiceController::class, 'index'])->name('invoice.index');
+    Route::get('/invoice/tambah',           [InvoiceController::class, 'create'])->name('invoice.create');
+    Route::post('/invoice/tambah',          [InvoiceController::class, 'store'])->name('invoice.store');
+    Route::get('/invoice/{no_invoice}/ubah',[InvoiceController::class, 'edit'])->name('invoice.edit');
+    Route::put('/invoice/{no_invoice}',     [InvoiceController::class, 'update'])->name('invoice.update');
+    Route::delete('/invoice/{no_invoice}',  [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+
+    // Invoice Detail (manage linked orders, DPP, PPN)
+    Route::get('/invoice/{no_invoice}/detail',          [InvoiceController::class, 'detail'])->name('invoice.detail');
+    Route::post('/invoice/{no_invoice}/detail/order',   [InvoiceController::class, 'addOrder'])->name('invoice.detail.addOrder');
+    Route::delete('/invoice/{no_invoice}/detail/order', [InvoiceController::class, 'removeOrder'])->name('invoice.detail.removeOrder');
+    Route::post('/invoice/{no_invoice}/detail/dpp',     [InvoiceController::class, 'saveDpp'])->name('invoice.detail.saveDpp');
+
+    // Invoice Print
+    Route::get('/invoice/{no_invoice}/cetak', [InvoiceController::class, 'cetak'])->name('invoice.cetak');
+});
 Route::resource('suratjalan',    SuratJalanController::class);

@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('css/templatemo-crypto-pages.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style-custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/new-style.css') }}">
-    <script src="https://kit.fontawesome.com/84fd8ce536.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/84fd8ce536.js" crossorigin="anonymous" onerror="fallbackFontAwesome()"></script>
     @stack('styles')
 </head>
 
@@ -41,11 +41,10 @@
 
             {{-- Logo --}}
             <div class="logo">
+                @php $logoUrl = asset('images/logoYoko.png'); @endphp
+
                 <div class="logo-icon logo-icon-custom"
-                     style="background-image: url({{ asset('public/images/logoYoko.png') }});
-                            background-size: 30px;
-                            background-position: center;
-                            background-repeat: no-repeat;">
+                    style="background-image: url('{{ $logoUrl }}'); background-size: 30px; background-position: center; background-repeat: no-repeat;">
                 </div>
                 <span class="logo-text">PT Yoko Fastener</span>
             </div>
@@ -55,12 +54,7 @@
                 <div class="nav-label">Main Menu</div>
                 <a href="{{ route('dashboard') }}"
                     class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="7" height="7" rx="1" />
-                        <rect x="14" y="3" width="7" height="7" rx="1" />
-                        <rect x="3" y="14" width="7" height="7" rx="1" />
-                        <rect x="14" y="14" width="7" height="7" rx="1" />
-                    </svg>
+                    <i class="fa-solid fa-house-chimney"></i>
                     Dashboard
                 </a>
             </nav>
@@ -70,30 +64,19 @@
                 <div class="nav-label">Data Master</div>
                 <a href="{{ route('petugas.index') }}"
                     class="nav-item {{ request()->routeIs('petugas.*') ? 'active' : '' }}">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M23 21v-2a4 4 0 00-3-3.87" />
-                        <path d="M16 3.13a4 4 0 010 7.75" />
-                    </svg>
+                    <i class="fa-solid fa-users"></i>
                     Petugas
                 </a>
 
                 <a href="{{ route('pelanggan.index') }}"
                     class="nav-item {{ request()->routeIs('pelanggan.*') ? 'active' : '' }}">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
+                    <i class="fa-solid fa-user"></i>
                     Pelanggan
                 </a>
 
                 <a href="{{ route('barang.index') }}"
                     class="nav-item {{ request()->routeIs('barang.*') ? 'active' : '' }}">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                        <path d="M16 21v-4a2 2 0 012-2h4M2 7h20M5 7V5a2 2 0 012-2h10a2 2 0 012 2v2" />
-                    </svg>
+                    <i class="fa-solid fa-boxes-packing"></i>
                     Barang
                 </a>
             </nav>
@@ -103,34 +86,20 @@
                 <div class="nav-label">Data Transaksional</div>
                 <a href="{{ route('purchaseorder.index') }}"
                     class="nav-item {{ request()->routeIs('purchaseorder.*') ? 'active' : '' }}">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                        <line x1="16" y1="13" x2="8" y2="13" />
-                        <line x1="16" y1="17" x2="8" y2="17" />
-                        <polyline points="10 9 9 9 8 9" />
-                    </svg>
+                    <i class="fa-solid fa-receipt"></i>
                     Purchase Order
                 </a>
 
                 <a href="{{ route('invoice.index') }}"
                     class="nav-item {{ request()->routeIs('invoice.*') ? 'active' : '' }}">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
-                        <line x1="1" y1="10" x2="23" y2="10" />
-                    </svg>
+                    <i class="fa-solid fa-file-invoice"></i>
                     Invoice
                 </a>
 
                 <a href="{{ route('suratjalan.index') }}"
                     class="nav-item {{ request()->routeIs('suratjalan.*') ? 'active' : '' }}">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="1" y="3" width="15" height="13" />
-                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-                        <circle cx="5.5" cy="18.5" r="2.5" />
-                        <circle cx="18.5" cy="18.5" r="2.5" />
-                    </svg>
-                    Surat Jalan Yuk
+                    <i class="fa-solid fa-truck-fast"></i>
+                    Surat Jalan
                 </a>
             </nav>
 
@@ -139,18 +108,8 @@
             <div class="sidebar-footer">
                 <div class="theme-toggle">
                     <div class="theme-toggle-label">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="5" />
-                            <line x1="12" y1="1" x2="12" y2="3" />
-                            <line x1="12" y1="21" x2="12" y2="23" />
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                            <line x1="1" y1="12" x2="3" y2="12" />
-                            <line x1="21" y1="12" x2="23" y2="12" />
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                        </svg>
-                        Light Mode
+                        <i class="fa-solid fa-eye"></i>
+                        Mode
                     </div>
                     <div class="theme-switch" id="themeSwitch"></div>
                 </div>
@@ -159,11 +118,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="logout-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
-                            <polyline points="16 17 21 12 16 7" />
-                            <line x1="21" y1="12" x2="9" y2="12" />
-                        </svg>
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
                         Logout
                     </button>
                 </form>
