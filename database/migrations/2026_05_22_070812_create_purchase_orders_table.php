@@ -6,30 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('purchase_order', function (Blueprint $table) {
-            $table->string('no_order')->primary();
-            $table->date('tgl_order')->nullable();
-            $table->date('schedule_delivery')->nullable();
-            $table->string('idcustomer')->nullable();
+            $table->string('no_order', 70)->primary();
+            $table->string('idcustomer', 20);
+            $table->date('tgl_order');
+            $table->date('schedule_delivery');
             $table->timestamps();
 
-            $table->foreign('idcustomer')
-                ->references('idcustomer')->on('customer')
-                ->nullOnDelete();
+            $table->foreign('idcustomer')->references('idcustomer')->on('customer');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('detail_po');
-        Schema::dropIfExists('purchase_orders');
+        Schema::dropIfExists('purchase_order');
     }
 };

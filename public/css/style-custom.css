@@ -45,32 +45,7 @@
   margin-bottom: 10px;
 }
 
-.custom-input {
-  background: var(--input-bg) !important;
-  border: 1px solid var(--input-border) !important;
-  padding: 14px 16px !important;
-  border-radius: var(--input-radius) !important;
-  width: 100%;
-  color: inherit !important;
-  transition: all 0.3s ease;
-}
 
-.custom-input:focus {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-  outline: none;
-}
-
-/* --- Dropdown / Select Specific --- */
-select.custom-input {
-  cursor: pointer;
-  color-scheme: dark; /* Penting untuk Dark Mode */
-}
-
-[data-theme="dark"] select.custom-input option {
-  background-color: #2b2b2b;
-  color: #fff;
-}
 
 /* --- Buttons --- */
 .btn-back {
@@ -136,44 +111,6 @@ select.custom-input {
   border: 1px solid transparent; /* Beri border transparan agar ukurannya sama dengan yang punya border */
   vertical-align: middle !important; /* Pastikan teks benar-benar di tengah secara vertikal */
   line-height: 1;
-}
-
-.role-badge {
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  display: inline-block;
-}
-
-/* Bendahara Umum 1 - Hijau Emerald */
-.role-bu1 {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-}
-
-/* Bendahara Umum 2 - Biru Sky */
-.role-bu2 {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-}
-
-/* Staff Keuangan - Orange Amber */
-.role-staff {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
-}
-
-/* Admin Sistem - Ungu Indigo */
-.role-admin {
-  background: rgba(139, 92, 246, 0.15);
-  color: #8b5cf6;
-}
-
-/* Default warna jika tidak terdeteksi */
-.role-default {
-  background: rgba(128, 128, 128, 0.1);
-  color: #888;
 }
 
 @media (max-width: 991px) {

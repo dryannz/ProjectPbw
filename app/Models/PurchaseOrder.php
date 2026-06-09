@@ -2,34 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetailPO extends Model
+class PurchaseOrder extends Model
 {
-    use HasFactory;
-
-    protected $table = 'detail_po';
+    protected $table = 'purchase_order';
+    protected $primaryKey = 'no_order';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'no_order',
-        'idbarang',
-        'wrn',
-        'pcs_krg',
-        'jmlh_krg',
-        'total_pcs',
-        'kg_krg',
-        'total_kg',
-        'jumlah_harga'
+        'idcustomer',
+        'tgl_order',
+        'schedule_delivery',
     ];
 
-    public function purchaseOrder()
+    protected $casts = [
+        'tgl_order'         => 'date',
+        'schedule_delivery' => 'date',
+    ];
+
+    public function customer()
     {
-        return $this->belongsTo(PurchaseOrder::class, 'no_order', 'no_order');
+        return $this->belongsTo(Customer::class, 'idcustomer', 'idcustomer');
     }
 
-    public function barang()
+    public function details()
     {
-        return $this->belongsTo(Barang::class, 'idbarang', 'idbarang');
+        return $this->hasMany(DetailPo::class, 'no_order', 'no_order');
     }
 }

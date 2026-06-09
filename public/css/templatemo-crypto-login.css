@@ -18,7 +18,7 @@ body.auth-page {
 ======================================== */
 .auth-branding {
     flex: 1;
-    background-image: linear-gradient(rgba(28,28,30,0.35), rgba(28,28,30,0.35)), url("../images/index.jpeg");
+    background-image: linear-gradient(rgba(28,28,30,0.35), rgba(28,28,30,0.35)), url("../assets/images/index.jpeg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

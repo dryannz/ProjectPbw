@@ -135,10 +135,32 @@
   border-right: 1px solid rgba(128, 128, 128, 0.2);
 }
 
-.col-action {
+.col-date {
   padding: 15px;
   width: 25%;
+  border-right: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.col-order {
+  padding: 15px;
+  width: 25%;
+  border-right: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.col-action {
+  padding: 15px;
+  width: 180px;        
+  min-width: 180px;
   text-align: center;
+  border-right: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.col-desc {
+  padding: 15px;
+  width: 180px;       
+  min-width: 180px;
+  text-align: center;
+  border-right: 1px solid rgba(128, 128, 128, 0.2);
 }
 
 /* Table Body */
@@ -148,6 +170,7 @@
   border-right: 1px solid rgba(128, 128, 128, 0.1);
   border-bottom: 1px solid rgba(128, 128, 128, 0.1);
   text-align: center;
+  white-space: nowrap;
 }
 
 .cell-name {
@@ -158,14 +181,68 @@
 
 .cell-position {
   padding: 15px;
+  text-align: center;
   border-right: 1px solid rgba(128, 128, 128, 0.1);
   border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.cell-date {
+  padding: 15px;
+  text-align: center;
+  white-space: nowrap;
+  border-right: 1px solid rgba(128, 128, 128, 0.1);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.cell-order {
+  padding: 15px;
+  text-align: center;
+  white-space: normal;
+  border-right: 1px solid rgba(128, 128, 128, 0.1);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+} .cell-order .order-badges {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* max 2 kolom */
+  gap: 4px;
+  justify-content: center;
+}
+.cell-order .order-badges span {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  display: inline-block;
 }
 
 .cell-action {
   padding: 15px;
   text-align: center;
+  white-space: nowrap;
+  border-right: 1px solid rgba(128, 128, 128, 0.1);
   border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.cell-desc {
+  padding: 15px;
+  text-align: center;
+  white-space: nowrap;
+  border-right: 1px solid rgba(128, 128, 128, 0.1);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.action-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    white-space: nowrap;
+}
+.desc-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    white-space: nowrap;
 }
 
 .user-menu {
@@ -225,9 +302,6 @@
     display: none;
   }
 }
-  flex-shrink: 0;
-  border-radius: 10px;
-}
 
 /* Ukuran gambar logo */
 .logo-img {
@@ -249,9 +323,18 @@
   text-decoration: none;
   font-weight: 600;
 }
-
+.link-detail {
+  color: #974edf;
+  text-decoration: none;
+  font-weight: 600;
+}
 .link-delete {
   color: #e74a3b;
+  text-decoration: none;
+  font-weight: 600;
+}
+.link-print {
+  color: #3be771;
   text-decoration: none;
   font-weight: 600;
 }
@@ -389,10 +472,45 @@
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  min-height: 250px;
 }
 
 .data-table {
   min-width: 620px;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 0.6rem 1rem; /* Sesuaikan padding agar tinggi input sama */
+    font-size: 1rem;
+    font-family: inherit;
+    color: #333;
+    background-color: #f2f2f2; /* Warna background abu-abu terang seperti di gambar */
+    border: 1px solid #ccc;
+    border-radius: 8px; /* Sudut melengkung (rounded) */
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+/* Hilangkan style bawaan browser KHUSUS untuk tag select */
+select.custom-input {
+    -webkit-appearance: none; /* Safari/Chrome */
+    -moz-appearance: none; /* Firefox */
+    appearance: none; /* Standard modern browser */
+    
+    /* Tambahkan icon panah (dropdown) kustom via SVG */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    padding-right: 2.5rem; /* Beri jarak ekstra di kanan agar teks tidak menabrak panah */
+}
+
+/* Efek saat input diklik (focus) agar lebih rapi */
+.custom-input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 @media (max-width: 992px) {
@@ -456,3 +574,53 @@
     font-size: 1.5rem;
   }
 }
+
+/* ============================================ */
+/* PRINT DROPDOWN STYLES (GLOBAL BODY-APPENDED) */
+/* ============================================ */
+.print-dropdown-menu-global {
+  display: none;
+  position: absolute;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow);
+  z-index: 9999; /* Sangat tinggi agar melayang di atas segalanya */
+  min-width: 100px;
+  overflow: hidden;
+  animation: fadeInDropdownGlobal 0.2s ease;
+}
+
+@keyframes fadeInDropdownGlobal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.print-dropdown-menu-global a {
+  display: block;
+  padding: 8px 14px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-bottom: 1px solid var(--border);
+}
+
+.print-dropdown-menu-global a:last-child {
+  border-bottom: none;
+}
+
+.print-dropdown-menu-global a:hover {
+  background-color: var(--bg-card-hover);
+  color: var(--accent-copper-light);
+}
+
+
