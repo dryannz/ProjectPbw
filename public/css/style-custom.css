@@ -1,0 +1,191 @@
+/* --- Root Variables untuk Konsistensi --- */
+:root {
+  --input-bg: rgba(128, 128, 128, 0.1);
+  --input-border: rgba(128, 128, 128, 0.2);
+  --card-radius: 15px;
+  --input-radius: 10px;
+}
+
+/* --- Layout Kontainer --- */
+.main-content {
+  transition: all 0.3s ease;
+}
+
+/* --- Card Styling --- */
+.custom-card {
+  background: var(--card-bg, rgba(255, 255, 255, 0.05));
+  border-radius: var(--card-radius);
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-card-header {
+  border-bottom: none;
+  padding: 0px 25px 0 0px;
+}
+
+.custom-card-body {
+  padding: 25px;
+}
+
+.custom-card-footer {
+  border-top: none;
+  padding: 20px 25px 25px 25px;
+  background-color: transparent;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  align-items: center;
+}
+
+/* --- Form Elements --- */
+.form-label-custom {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.custom-input {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--input-border) !important;
+  padding: 14px 16px !important;
+  border-radius: var(--input-radius) !important;
+  width: 100%;
+  color: inherit !important;
+  transition: all 0.3s ease;
+}
+
+.custom-input:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  outline: none;
+}
+
+/* --- Dropdown / Select Specific --- */
+select.custom-input {
+  cursor: pointer;
+  color-scheme: dark; /* Penting untuk Dark Mode */
+}
+
+[data-theme="dark"] select.custom-input option {
+  background-color: #2b2b2b;
+  color: #fff;
+}
+
+/* --- Buttons --- */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(
+    212,
+    175,
+    55,
+    0.1
+  ) !important; /* Warna emas transparan */
+  color: #d4af37 !important; /* Teks warna emas */
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  padding: 10px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background-color: #d4af37 !important; /* Emas solid saat hover */
+  color: #ffffff !important;
+  transform: translateX(-5px); /* Efek geser sedikit ke kiri */
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.btn-save {
+  padding: 12px 35px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.btn-reset {
+  background-color: rgba(239, 68, 68, 0.1) !important; /* Merah transparan */
+  color: #ef4444 !important; /* Warna teks merah terang */
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-reset:hover {
+  background-color: #ef4444 !important; /* Jadi merah solid saat kursor di atasnya */
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.custom-card-footer .btn,
+.custom-card-footer .btn-save,
+.custom-card-footer .btn-reset {
+  display: inline-flex; /* Gunakan flex agar teks benar-benar di tengah */
+  align-items: center !important;
+  justify-content: center !important;
+  height: 45px; /* Kunci tingginya agar sama persis */
+  padding: 0 30px; /* Padding kiri-kanan saja, atas-bawah diatur oleh height */
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent; /* Beri border transparan agar ukurannya sama dengan yang punya border */
+  vertical-align: middle !important; /* Pastikan teks benar-benar di tengah secara vertikal */
+  line-height: 1;
+}
+
+.role-badge {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Bendahara Umum 1 - Hijau Emerald */
+.role-bu1 {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+/* Bendahara Umum 2 - Biru Sky */
+.role-bu2 {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+/* Staff Keuangan - Orange Amber */
+.role-staff {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+/* Admin Sistem - Ungu Indigo */
+.role-admin {
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+}
+
+/* Default warna jika tidak terdeteksi */
+.role-default {
+  background: rgba(128, 128, 128, 0.1);
+  color: #888;
+}
+
+@media (max-width: 991px) {
+  .main-content {
+    padding-top: 100px !important; /* Ruang lebih besar di HP karena tombolnya lebih dominan */
+    padding-left: 20px !important;
+  }
+}
+
+/* Pastikan section header tidak punya margin negatif */
+.section-header {
+  margin-top: 0 !important;
+  position: relative;
+  z-index: 1; /* Supaya teks tetap di bawah dropdown menu kalau terbuka */
+}
