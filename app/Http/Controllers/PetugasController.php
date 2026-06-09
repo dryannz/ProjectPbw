@@ -7,14 +7,7 @@ use App\Http\Requests\PetugasRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * PetugasController
- * Menggantikan 4 file native:
- *   petugas-lihat.php  → index()
- *   petugas-tambah.php → create() + store()
- *   petugas-ubah.php   → edit()   + update()
- *   petugas-hapus.php  → destroy()  ← termasuk hapus file TTD dari storage
- */
+
 class PetugasController extends Controller
 {
     /**

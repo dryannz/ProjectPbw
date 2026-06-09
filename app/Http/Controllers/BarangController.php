@@ -6,14 +6,7 @@ use App\Models\Barang;
 use App\Http\Requests\BarangRequest;
 use Illuminate\Http\Request;
 
-/**
- * BarangController
- * Menggantikan 4 file native:
- *   barang-lihat.php  → index()
- *   barang-tambah.php → create() + store()
- *   barang-ubah.php   → edit()   + update()
- *   barang-hapus.php  → destroy()
- */
+
 class BarangController extends Controller
 {
     /**
