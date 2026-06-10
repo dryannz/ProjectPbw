@@ -68,27 +68,6 @@
                                     value="{{ old('tgl_invoice', \Carbon\Carbon::parse($invoice->tgl_invoice)->format('Y-m-d')) }}"
                                     class="custom-input" required>
                             </div>
-
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label-custom">Subtotal</label>
-                                <input type="text" name="subtotal"
-                                    value="{{ old('subtotal', $invoice->subtotal) }}"
-                                    class="custom-input" required>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label-custom">PPN</label>
-                                <input type="text" name="ppn"
-                                    value="{{ old('ppn', $invoice->ppn) }}"
-                                    class="custom-input" required>
-                            </div>
-
-                            <div class="col-md-12 mb-2">
-                                <label class="form-label-custom">DPP</label>
-                                <input type="text" name="dpp"
-                                    value="{{ old('dpp', $invoice->dpp) }}"
-                                    class="custom-input" required>
-                            </div>
                         </div>
                     </div>
 
