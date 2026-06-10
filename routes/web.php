@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\CustomerController;
@@ -7,31 +8,47 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\DetailPoController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SuratJalanController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\DashboardController;
 
 // Halaman login
-Route::get('/', fn() => view('auth.login'))->name('login');
-Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login.post');
-Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::middleware('guest')->group(function () {
+    Route::get('/',       [LoginController::class, 'showForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+});
 
-// Dashboard
-Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
-// Settings
-Route::get('/settings', fn() => view('settings'))->name('settings');
+// Dashboard (protected)
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Data Master
+    Route::resource('petugas',  \App\Http\Controllers\PetugasController::class);
+    Route::resource('customer', \App\Http\Controllers\CustomerController::class);
+    Route::resource('barang',   \App\Http\Controllers\BarangController::class);
+
+    // Data Transaksional
+    Route::resource('purchase-order', \App\Http\Controllers\PurchaseOrderController::class);
+    Route::resource('invoice',        \App\Http\Controllers\InvoiceController::class);
+    Route::resource('surat-jalan',    \App\Http\Controllers\SuratJalanController::class);
+});
 
 // Resource routes (otomatis buat index, create, store, edit, update, destroy)
 Route::resource('petugas',       PetugasController::class);
 Route::resource('customer',     CustomerController::class);
 Route::resource('barang',        BarangController::class);
 Route::resource('purchaseorder', PurchaseOrderController::class);
- Route::prefix('purchaseorder/{no_order}/detail')->name('purchaseorder.detail.')->group(function () {
-        Route::get('/',                     [DetailPoController::class, 'index'])   ->name('index');
-        Route::get('/tambah',               [DetailPoController::class, 'create'])  ->name('create');
-        Route::post('/',                    [DetailPoController::class, 'store'])   ->name('store');
-        Route::get('/{idbarang}/ubah',      [DetailPoController::class, 'edit'])    ->name('edit');
-        Route::put('/{idbarang}',           [DetailPoController::class, 'update'])  ->name('update');
-        Route::delete('/{idbarang}',        [DetailPoController::class, 'destroy']) ->name('destroy');
-    });
+Route::prefix('purchaseorder/{no_order}/detail')->name('purchaseorder.detail.')->group(function () {
+    Route::get('/',                     [DetailPoController::class, 'index'])->name('index');
+    Route::get('/tambah',               [DetailPoController::class, 'create'])->name('create');
+    Route::post('/',                    [DetailPoController::class, 'store'])->name('store');
+    Route::get('/{idbarang}/ubah',      [DetailPoController::class, 'edit'])->name('edit');
+    Route::put('/{idbarang}',           [DetailPoController::class, 'update'])->name('update');
+    Route::delete('/{idbarang}',        [DetailPoController::class, 'destroy'])->name('destroy');
+});
 Route::resource('invoice',       InvoiceController::class);
 Route::middleware(['auth'])->group(function () {
 
@@ -39,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoice',                  [InvoiceController::class, 'index'])->name('invoice.index');
     Route::get('/invoice/tambah',           [InvoiceController::class, 'create'])->name('invoice.create');
     Route::post('/invoice/tambah',          [InvoiceController::class, 'store'])->name('invoice.store');
-    Route::get('/invoice/{no_invoice}/ubah',[InvoiceController::class, 'edit'])->name('invoice.edit');
+    Route::get('/invoice/{no_invoice}/ubah', [InvoiceController::class, 'edit'])->name('invoice.edit');
     Route::put('/invoice/{no_invoice}',     [InvoiceController::class, 'update'])->name('invoice.update');
     Route::delete('/invoice/{no_invoice}',  [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 
@@ -52,4 +69,14 @@ Route::middleware(['auth'])->group(function () {
     // Invoice Print
     Route::get('/invoice/{no_invoice}/cetak', [InvoiceController::class, 'cetak'])->name('invoice.cetak');
 });
-Route::resource('suratjalan',    SuratJalanController::class);
+Route::middleware(['auth'])->prefix('suratjalan')->name('suratjalan.')->group(function () {
+
+    Route::get('/',          [SuratJalanController::class, 'index'])->name('index');
+    Route::get('/create',    [SuratJalanController::class, 'create'])->name('create');
+    Route::post('/',         [SuratJalanController::class, 'store'])->name('store');
+    Route::get('/{no_surat}',        [SuratJalanController::class, 'detail'])->name('detail');
+    Route::get('/{no_surat}/edit',   [SuratJalanController::class, 'edit'])->name('edit');
+    Route::put('/{no_surat}',        [SuratJalanController::class, 'update'])->name('update');
+    Route::delete('/{no_surat}',     [SuratJalanController::class, 'destroy'])->name('destroy');
+    Route::get('/{no_surat}/cetak',  [SuratJalanController::class, 'cetak'])->name('cetak');
+});

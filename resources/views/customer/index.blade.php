@@ -65,6 +65,7 @@
                                           onsubmit="return confirm('Yakin ingin menghapus customer ini?')">
                                         @csrf
                                         @method('DELETE')
+                                        <span style="color:#ccc; margin:0 5px;">|</span>
                                         <button type="submit" class="link-delete"
                                                 style="background:none; border:none; cursor:pointer; font-weight:600; color:#e74a3b;">
                                             Hapus
