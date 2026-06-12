@@ -8,6 +8,11 @@ use App\Models\Petugas;
 
 class AuthController extends Controller
 {
+    public function showForm()
+    {
+        return view('auth.login');
+    }
+
     public function login(Request $request)
     {
         $request->validate([

@@ -8,16 +8,16 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\DetailPoController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SuratJalanController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 
 // Halaman login
 Route::middleware('guest')->group(function () {
-    Route::get('/',       [LoginController::class, 'showForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login']);
+    Route::get('/',       [AuthController::class, 'showForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
-Route::post('/logout', [LoginController::class, 'logout'])
+Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 

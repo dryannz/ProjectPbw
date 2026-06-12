@@ -77,7 +77,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="link-delete"
-                                                        style="background:none;border:none;cursor:pointer;padding:0;">
+                                                        style="background:none; border:none; cursor:pointer; padding:0; font-size:inherit; font-family:inherit; color:#c20404ff;">
                                                     Hapus
                                                 </button>
                                             </form>

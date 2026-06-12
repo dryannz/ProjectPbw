@@ -67,7 +67,7 @@
                                         @method('DELETE')
                                         <span style="color:#ccc; margin:0 5px;">|</span>
                                         <button type="submit" class="link-delete"
-                                                style="background:none; border:none; cursor:pointer; font-weight:600; color:#e74a3b;">
+                                                style="background:none; border:none; cursor:pointer; padding:0; font-size:inherit; font-family:inherit; color:#c20404ff;">
                                             Hapus
                                         </button>
                                     </form>

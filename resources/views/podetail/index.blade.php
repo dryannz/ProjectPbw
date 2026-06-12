@@ -146,7 +146,8 @@
                                       onsubmit="return confirm('Yakin hapus barang {{ $d->barang->ukuran ?? '' }}?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-tbl-del" style="background:none;border:none;cursor:pointer;">
+                                    <button type="submit" class="btn-tbl-del" 
+                                    style="background:none; border:none; cursor:pointer; padding:0; font-size:inherit; font-family:inherit; color:#c20404ff;">
                                         <i class="fa-solid fa-trash"></i> Hapus
                                     </button>
                                 </form>
