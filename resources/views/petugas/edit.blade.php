@@ -121,8 +121,13 @@
         const passwordField = document.getElementById('passwordField');
         const passwordInput = document.getElementById('passwordInput');
 
+        function requiresPassword(val) {
+            const v = val.trim().toLowerCase();
+            return v === 'admin' || v.includes('hrd');
+        }
+
         function togglePassword() {
-            const isAdmin = jabatanInput.value.trim().toLowerCase() === 'admin';
+            const isAdmin = requiresPassword(jabatanInput.value);
             passwordField.style.display = isAdmin ? 'block' : 'none';
             // Di edit, password tidak required karena bisa dikosongkan (tidak berubah)
             if (!isAdmin) passwordInput.value = '';

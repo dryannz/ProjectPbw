@@ -83,7 +83,7 @@
                                 <div class="col-md-12 mb-4" id="passwordField" style="display:none;">
                                     <label class="form-label-custom">
                                         Password
-                                        <small class="text-muted">(wajib diisi untuk jabatan Admin)</small>
+                                        <small class="text-muted">(wajib diisi untuk jabatan Admin / HRD)</small>
                                     </label>
                                     <input type="password"
                                            name="password"
@@ -118,8 +118,13 @@
         const passwordField = document.getElementById('passwordField');
         const passwordInput = document.getElementById('passwordInput');
 
+        function requiresPassword(val) {
+            const v = val.trim().toLowerCase();
+            return v === 'admin' || v.includes('hrd');
+        }
+
         function togglePassword() {
-            const isAdmin = jabatanInput.value.trim().toLowerCase() === 'admin';
+            const isAdmin = requiresPassword(jabatanInput.value);
             passwordField.style.display = isAdmin ? 'block' : 'none';
             passwordInput.required      = isAdmin;
             if (!isAdmin) passwordInput.value = '';

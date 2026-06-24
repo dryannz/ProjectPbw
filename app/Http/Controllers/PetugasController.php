@@ -20,9 +20,18 @@ class PetugasController extends Controller
         return view('petugas.create');
     }
 
+    /**
+     * Cek apakah jabatan memerlukan password (Admin atau mengandung kata HRD).
+     */
+    private function requiresPassword(string $jabatan): bool
+    {
+        $jabatan = strtolower(trim($jabatan));
+        return $jabatan === 'admin' || str_contains($jabatan, 'hrd');
+    }
+
     public function store(Request $request)
     {
-        $isAdmin = strtolower(trim($request->jabatan)) === 'admin';
+        $isAdmin = $this->requiresPassword($request->jabatan);
 
         $rules = [
             'idpetugas'   => 'required|string|unique:petugas,idpetugas',
@@ -30,7 +39,7 @@ class PetugasController extends Controller
             'jabatan'     => 'required|string|max:100',
         ];
 
-        // Password wajib diisi hanya jika jabatan Admin
+        // Password wajib diisi hanya jika jabatan Admin atau mengandung HRD
         if ($isAdmin) {
             $rules['password'] = 'required|string|min:6';
         }
@@ -43,7 +52,7 @@ class PetugasController extends Controller
             'jabatan'     => $request->jabatan,
         ];
 
-        // Hash password jika jabatan Admin dan password diisi
+        // Hash password jika jabatan memerlukan password dan password diisi
         if ($isAdmin && $request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
@@ -66,7 +75,7 @@ class PetugasController extends Controller
     {
         $petugas = Petugas::findOrFail($id);
 
-        $isAdmin = strtolower(trim($request->jabatan)) === 'admin';
+        $isAdmin = $this->requiresPassword($request->jabatan);
 
         $rules = [
             'namapetugas' => 'required|string|max:255',
@@ -85,12 +94,12 @@ class PetugasController extends Controller
             'jabatan'     => $request->jabatan,
         ];
 
-        // Update password hanya jika jabatan Admin dan field password diisi
+        // Update password hanya jika jabatan memerlukan password dan field diisi
         if ($isAdmin && $request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
-        // Jika jabatan diubah dari Admin ke non-Admin, hapus password
+        // Jika jabatan diubah ke non-Admin dan non-HRD, hapus password
         if (!$isAdmin) {
             $data['password'] = null;
         }
