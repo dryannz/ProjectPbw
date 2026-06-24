@@ -14,7 +14,7 @@ class PurchaseOrderController extends Controller
     public function index()
     {
         $purchaseOrders = PurchaseOrder::with('customer')
-            ->orderBy('no_order', 'asc')
+            ->orderBy('no_order', 'desc')
             ->paginate(5);
 
         return view('purchaseorder.index', compact('purchaseOrders'));

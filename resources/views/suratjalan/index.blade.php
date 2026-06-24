@@ -3,6 +3,10 @@
 
 @section('title', 'Manajemen Surat Jalan')
 
+@php
+    $isHrd = str_contains(strtolower(trim(auth()->user()->jabatan ?? '')), 'hrd');
+@endphp
+
 @section('content')
 <div class="header">
     <div class="header-left">
@@ -29,9 +33,13 @@
 </div>
 
 <div class="container-fluid">
+
+    {{-- Tombol Tambah: disembunyikan untuk HRD --}}
+    @if(!$isHrd)
     <div class="section-header">
         <a href="{{ route('suratjalan.create') }}" class="btn-add">+ Tambah Surat Jalan</a>
     </div>
+    @endif
 
     {{-- Flash message --}}
     @if(session('success'))
@@ -51,8 +59,12 @@
                             <th class="col-position">Petugas Warehouse</th>
                             <th class="col-position">Petugas Driver</th>
                             <th class="col-date">Tanggal Surat</th>
+                            {{-- Kolom Aksi (Edit+Hapus): hanya non-HRD --}}
+                            @if(!$isHrd)
                             <th class="col-action">Aksi</th>
+                            {{-- Kolom Keterangan (Detail+Cetak): hanya non-HRD --}}
                             <th class="col-desc">Keterangan</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -101,7 +113,8 @@
                                 <td class="cell-position">{{ $sj->nama_driver   ?? '-' }}</td>
                                 <td class="cell-date">{{ $sj->tgl_surat?->format('Y-m-d') }}</td>
 
-                                {{-- Aksi: Edit & Hapus --}}
+                                {{-- Aksi & Keterangan: hanya non-HRD --}}
+                                @if(!$isHrd)
                                 <td class="cell-action">
                                     <div class="action-links">
                                         <a href="{{ route('suratjalan.edit', $sj->no_surat) }}" class="link-edit">Edit</a>
@@ -118,8 +131,6 @@
                                         </form>
                                     </div>
                                 </td>
-
-                                {{-- Keterangan: Detail & Cetak --}}
                                 <td class="cell-desc">
                                     <div class="desc-links">
                                         <a href="{{ route('suratjalan.detail', $sj->no_surat) }}" class="link-detail">Detail</a>
@@ -128,10 +139,11 @@
                                            data-no-surat="{{ $sj->no_surat }}">Cetak</a>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="empty-message" style="text-align:center">
+                                <td colspan="{{ $isHrd ? 7 : 9 }}" class="empty-message" style="text-align:center">
                                     Belum ada data surat jalan.
                                 </td>
                             </tr>
@@ -140,10 +152,9 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
             <div class="table-footer">
                 <div class="table-info">
-                    detailing {{ $suratJalans->firstItem() ?? 0 }}
+                    Showing {{ $suratJalans->firstItem() ?? 0 }}
                     to {{ $suratJalans->lastItem() ?? 0 }}
                     of {{ $suratJalans->total() }} entries
                 </div>
@@ -212,9 +223,9 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('printLinkCopy2').href = printBase + no + cetakSuffix + '?copy=copy2';
             document.getElementById('printLinkCopy3').href = printBase + no + cetakSuffix + '?copy=copy3';
 
-            const rect   = this.getBoundingClientRect();
-            const left   = rect.left + window.scrollX + rect.width / 2 - 50;
-            const top    = rect.top  + window.scrollY + rect.height + 6;
+            const rect = this.getBoundingClientRect();
+            const left = rect.left + window.scrollX + rect.width / 2 - 50;
+            const top  = rect.top  + window.scrollY + rect.height + 6;
             dropdown.style.left    = left + 'px';
             dropdown.style.top     = top  + 'px';
             dropdown.style.display = 'block';

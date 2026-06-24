@@ -33,12 +33,7 @@
                         </div>
                     @endif
 
-                    {{--
-                        enctype="multipart/form-data" wajib ada karena ada upload file TTD.
-                        Native: tidak ada fitur upload di tambah, ditambahkan di Laravel.
-                    --}}
-                    <form action="{{ route('petugas.store') }}" method="POST"
-                          enctype="multipart/form-data">
+                    <form action="{{ route('petugas.store') }}" method="POST">
                         @csrf
 
                         <div class="card-body custom-card-body">
@@ -74,6 +69,7 @@
                                     <label class="form-label-custom">Jabatan</label>
                                     <input type="text"
                                            name="jabatan"
+                                           id="jabatanInput"
                                            value="{{ old('jabatan') }}"
                                            class="custom-input @error('jabatan') is-invalid @enderror"
                                            placeholder="Masukkan jabatan"
@@ -83,6 +79,22 @@
                                     @enderror
                                 </div>
 
+                                {{-- Field password: hanya muncul jika jabatan = Admin --}}
+                                <div class="col-md-12 mb-4" id="passwordField" style="display:none;">
+                                    <label class="form-label-custom">
+                                        Password
+                                        <small class="text-muted">(wajib diisi untuk jabatan Admin)</small>
+                                    </label>
+                                    <input type="password"
+                                           name="password"
+                                           id="passwordInput"
+                                           class="custom-input @error('password') is-invalid @enderror"
+                                           placeholder="Masukkan password..."
+                                           autocomplete="new-password">
+                                    @error('password')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
 
                             </div>
                         </div>
@@ -91,7 +103,7 @@
                             <button type="submit" class="btn primary btn-save">
                                 Simpan Data Petugas
                             </button>
-                            <button type="reset" class="btn-reset ms-2">
+                            <button type="reset" class="btn-reset ms-2" onclick="resetPasswordField()">
                                 Reset Form
                             </button>
                         </div>
@@ -100,5 +112,28 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const jabatanInput  = document.getElementById('jabatanInput');
+        const passwordField = document.getElementById('passwordField');
+        const passwordInput = document.getElementById('passwordInput');
+
+        function togglePassword() {
+            const isAdmin = jabatanInput.value.trim().toLowerCase() === 'admin';
+            passwordField.style.display = isAdmin ? 'block' : 'none';
+            passwordInput.required      = isAdmin;
+            if (!isAdmin) passwordInput.value = '';
+        }
+
+        function resetPasswordField() {
+            passwordField.style.display = 'none';
+            passwordInput.required      = false;
+        }
+
+        jabatanInput.addEventListener('input', togglePassword);
+
+        // Cek saat load (jika ada old input setelah validasi gagal)
+        togglePassword();
+    </script>
 
 @endsection

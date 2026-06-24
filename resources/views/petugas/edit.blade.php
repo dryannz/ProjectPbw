@@ -37,8 +37,7 @@
                     @endif
 
                     <form action="{{ route('petugas.update', $petugas->idpetugas) }}"
-                          method="POST"
-                          enctype="multipart/form-data">
+                          method="POST">
                         @csrf
                         @method('PUT')
 
@@ -72,6 +71,7 @@
                                     <label class="form-label-custom">Jabatan</label>
                                     <input type="text"
                                            name="jabatan"
+                                           id="jabatanInput"
                                            value="{{ old('jabatan', $petugas->jabatan) }}"
                                            class="custom-input @error('jabatan') is-invalid @enderror"
                                            required>
@@ -80,31 +80,26 @@
                                     @enderror
                                 </div>
 
-                                {{-- Tanda tangan: tampilkan preview jika sudah ada --}}
-                                <div class="col-md-12 mb-2">
+                                {{-- Field password: hanya muncul jika jabatan = Admin --}}
+                                <div class="col-md-12 mb-4" id="passwordField" style="display:none;">
                                     <label class="form-label-custom">
-                                        Tanda Tangan
-                                        <small class="text-muted">(kosongkan jika tidak ingin mengubah)</small>
+                                        Password Baru
+                                        <small class="text-muted">(kosongkan jika tidak ingin mengubah password)</small>
                                     </label>
-
-                                    @if($petugas->ttdpetugas)
-                                        <div style="margin-bottom:8px;">
-                                            <img src="{{ asset('storage/ttd/' . $petugas->ttdpetugas) }}"
-                                                 alt="TTD {{ $petugas->namapetugas }}"
-                                                 style="max-height:80px;border:1px solid var(--border);border-radius:6px;padding:4px;">
-                                            <small class="text-muted" style="display:block;margin-top:4px;">
-                                                File saat ini: {{ $petugas->ttdpetugas }}
-                                            </small>
-                                        </div>
-                                    @endif
-
-                                    <input type="file"
-                                           name="ttdpetugas"
-                                           class="custom-input @error('ttdpetugas') is-invalid @enderror"
-                                           accept=".jpg,.jpeg,.png,.svg">
-                                    @error('ttdpetugas')
+                                    <input type="password"
+                                           name="password"
+                                           id="passwordInput"
+                                           class="custom-input @error('password') is-invalid @enderror"
+                                           placeholder="Masukkan password baru..."
+                                           autocomplete="new-password">
+                                    @error('password')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
+                                    @if($petugas->password)
+                                        <small class="text-muted" style="display:block;margin-top:4px;">
+                                            &#10003; Password sudah tersimpan. Kosongkan field ini jika tidak ingin menggantinya.
+                                        </small>
+                                    @endif
                                 </div>
 
                             </div>
@@ -120,5 +115,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const jabatanInput  = document.getElementById('jabatanInput');
+        const passwordField = document.getElementById('passwordField');
+        const passwordInput = document.getElementById('passwordInput');
+
+        function togglePassword() {
+            const isAdmin = jabatanInput.value.trim().toLowerCase() === 'admin';
+            passwordField.style.display = isAdmin ? 'block' : 'none';
+            // Di edit, password tidak required karena bisa dikosongkan (tidak berubah)
+            if (!isAdmin) passwordInput.value = '';
+        }
+
+        jabatanInput.addEventListener('input', togglePassword);
+
+        // Cek saat load — jika jabatan sudah Admin saat halaman dibuka
+        togglePassword();
+    </script>
 
 @endsection

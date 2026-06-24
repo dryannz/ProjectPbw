@@ -89,7 +89,7 @@ class InvoiceController extends Controller
                 'i.no_order',
                 'i.tgl_invoice',
                 'p.namapetugas',
-                DB::raw("GROUP_CONCAT(di.no_order ORDER BY di.no_order ASC SEPARATOR ', ') AS semua_no_order")
+                DB::raw("GROUP_CONCAT(di.no_order ORDER BY di.no_order DESC SEPARATOR ', ') AS semua_no_order")
             )
             ->groupBy('i.no_invoice', 'i.idpetugas_admin', 'i.no_order', 'i.tgl_invoice', 'p.namapetugas')
             ->orderBy('i.no_invoice')

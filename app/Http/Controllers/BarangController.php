@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
-use App\Http\Requests\BarangRequest;
 use Illuminate\Http\Request;
 
 
@@ -15,7 +14,7 @@ class BarangController extends Controller
      */
     public function index(Request $request)
     {
-        $barangs = Barang::orderBy('idbarang', 'asc')
+        $barangs = Barang::orderBy('idbarang', 'desc')
             ->paginate(5)
             ->withQueryString(); // agar parameter ?search tetap saat pindah halaman
 
@@ -35,9 +34,17 @@ class BarangController extends Controller
      * barang-tambah.php (POST)
      * Proses simpan barang baru.
      */
-    public function store(BarangRequest $request)
+    public function store(Request $request) // Ubah parameter di sini
     {
-        Barang::create($request->validated());
+        // 1. Tambahkan validasi manual di sini
+        $validated = $request->validate([
+            'idbarang'    => 'required|unique:barang,idbarang',
+            'ukuran'      => 'required|string',
+            'ukuran_tamu' => 'nullable|string',
+            'harga'       => 'required|numeric'
+        ]);
+
+        Barang::create($validated);
 
         return redirect()
             ->route('barang.index')
@@ -61,8 +68,15 @@ class BarangController extends Controller
      * Proses update data barang.
      * idbarang tidak bisa diubah (readonly di form).
      */
-    public function update(BarangRequest $request, string $id)
+    public function update(Request $request, string $id) // Ubah parameter di sini
     {
+        // 1. Tambahkan validasi manual di sini
+        $request->validate([
+            'ukuran'      => 'required|string',
+            'ukuran_tamu' => 'nullable|string',
+            'harga'       => 'required|numeric'
+        ]);
+
         $barang = Barang::findOrFail($id);
 
         $barang->update($request->only(['ukuran', 'ukuran_tamu', 'harga']));

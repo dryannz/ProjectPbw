@@ -28,8 +28,8 @@ class SuratJalanController extends Controller
                 'pa.namapetugas as nama_admin',
                 'pw.namapetugas as nama_warehouse',
                 'pd.namapetugas as nama_driver',
-                DB::raw("GROUP_CONCAT(DISTINCT dsj.no_invoice ORDER BY dsj.no_invoice ASC SEPARATOR ', ') AS semua_no_invoice"),
-                DB::raw("GROUP_CONCAT(DISTINCT di.no_order  ORDER BY di.no_order  ASC SEPARATOR ', ') AS semua_no_order"),
+                DB::raw("GROUP_CONCAT(DISTINCT dsj.no_invoice ORDER BY dsj.no_invoice DESC SEPARATOR ', ') AS semua_no_invoice"),
+                DB::raw("GROUP_CONCAT(DISTINCT di.no_order  ORDER BY di.no_order  DESC SEPARATOR ', ') AS semua_no_order"),
             ])
             ->leftJoin('petugas as pa', 'surat_jalan.idpetugas_admin',     '=', 'pa.idpetugas')
             ->leftJoin('petugas as pw', 'surat_jalan.idpetugas_warehouse',  '=', 'pw.idpetugas')

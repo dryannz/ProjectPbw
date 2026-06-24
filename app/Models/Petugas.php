@@ -24,12 +24,13 @@ class Petugas extends Authenticatable
     // PK bertipe string (format: P-XXX), bukan auto-increment
     public    $incrementing = false;
     protected $keyType      = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'idpetugas',
         'namapetugas',
         'jabatan',
-        'ttdpetugas',  // nama file tanda tangan (disimpan di storage)
+        'password',
     ];
 
     protected $hidden = [

@@ -3,6 +3,10 @@
 
 @section('title', 'Invoice - Lihat')
 
+@php
+    $isHrd = str_contains(strtolower(trim(auth()->user()->jabatan ?? '')), 'hrd');
+@endphp
+
 @section('content')
 <div class="header">
     <div class="header-left">
@@ -29,9 +33,13 @@
 </div>
 
 <div class="container-fluid">
+
+    {{-- Tombol Tambah: disembunyikan untuk HRD --}}
+    @if(!$isHrd)
     <div class="section-header">
         <a href="{{ route('invoice.create') }}" class="btn-add">+ Tambah Invoice</a>
     </div>
+    @endif
 
     <div class="card">
         <div class="card-body">
@@ -43,8 +51,11 @@
                             <th class="col-name">Nama Petugas</th>
                             <th class="col-order">No Order</th>
                             <th class="col-date">Tanggal Invoice</th>
+                            {{-- Kolom Aksi & Keterangan: hanya non-HRD --}}
+                            @if(!$isHrd)
                             <th class="col-action">Aksi</th>
                             <th class="col-desc">Keterangan</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -71,6 +82,9 @@
                                 @endif
                             </td>
                             <td class="cell-date">{{ $data->tgl_invoice }}</td>
+
+                            {{-- Aksi & Keterangan: hanya non-HRD --}}
+                            @if(!$isHrd)
                             <td class="cell-action">
                                 <div class="action-links">
                                     <a href="{{ route('invoice.edit', $data->no_invoice) }}" class="link-edit">Edit</a>
@@ -87,6 +101,7 @@
                                     </form>
                                 </div>
                             </td>
+                            
                             <td class="cell-desc">
                                 <div class="desc-links">
                                     <a href="{{ route('invoice.detail', $data->no_invoice) }}" class="link-detail">Detail</a>
@@ -95,10 +110,15 @@
                                         data-no-invoice="{{ $data->no_invoice }}">Cetak</a>
                                 </div>
                             </td>
+                            
+                            <td class="cell-desc">
+                                <span style="color:#888; font-size:0.85rem;">—</span>
+                            </td>
+                            @endif
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="empty-message" style="text-align:center;">
+                            <td colspan="{{ $isHrd ? 5 : 6 }}" class="empty-message" style="text-align:center;">
                                 Belum ada data invoice.
                             </td>
                         </tr>
@@ -107,7 +127,6 @@
                 </table>
             </div>
 
-            {{-- Pagination info & links --}}
             <div class="table-footer">
                 <div class="table-info">
                     Showing {{ $invoices->firstItem() ?? 0 }} to {{ $invoices->lastItem() ?? 0 }}
@@ -141,7 +160,7 @@
 
 {{-- Global Print Dropdown --}}
 <div id="globalPrintDropdown" class="print-dropdown-menu-global" style="display:none; position:absolute; z-index:9999;">
-    <a href="#" id="printLinkOri" target="_blank">Ori</a>
+    <a href="#" id="printLinkOri"   target="_blank">Ori</a>
     <a href="#" id="printLinkCopy1" target="_blank">Copy 1</a>
     <a href="#" id="printLinkCopy2" target="_blank">Copy 2</a>
     <a href="#" id="printLinkCopy3" target="_blank">Copy 3</a>
@@ -151,7 +170,7 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // ── Search ──────────────────────────────────────────────────────────────
+        // ── Search ───────────────────────────────────────────────────────────
         const searchInput = document.getElementById('searchInput');
         const rows = document.querySelectorAll('.data-table tbody tr');
 
@@ -165,14 +184,14 @@
             });
         }
 
-        // ── Print Dropdown ───────────────────────────────────────────────────────
-        const triggers = document.querySelectorAll('.btn-print-trigger');
-        const dropdown = document.getElementById('globalPrintDropdown');
+        // ── Print Dropdown ───────────────────────────────────────────────────
+        const triggers     = document.querySelectorAll('.btn-print-trigger');
+        const dropdown     = document.getElementById('globalPrintDropdown');
         const printLinkOri = document.getElementById('printLinkOri');
-        const printLinkC1 = document.getElementById('printLinkCopy1');
-        const printLinkC2 = document.getElementById('printLinkCopy2');
-        const printLinkC3 = document.getElementById('printLinkCopy3');
-        const cetakBase = '{{ route("invoice.cetak", ":id") }}';
+        const printLinkC1  = document.getElementById('printLinkCopy1');
+        const printLinkC2  = document.getElementById('printLinkCopy2');
+        const printLinkC3  = document.getElementById('printLinkCopy3');
+        const cetakBase    = '{{ route("invoice.cetak", ":id") }}';
 
         triggers.forEach(function(trigger) {
             trigger.addEventListener('click', function(e) {
@@ -183,21 +202,21 @@
                 const base = cetakBase.replace(':id', encodeURIComponent(noInvoice));
 
                 printLinkOri.href = base + '?copy=ori';
-                printLinkC1.href = base + '?copy=copy1';
-                printLinkC2.href = base + '?copy=copy2';
-                printLinkC3.href = base + '?copy=copy3';
+                printLinkC1.href  = base + '?copy=copy1';
+                printLinkC2.href  = base + '?copy=copy2';
+                printLinkC3.href  = base + '?copy=copy3';
 
-                const rect = this.getBoundingClientRect();
+                const rect         = this.getBoundingClientRect();
                 const dropdownWidth = 110;
                 let leftPos = rect.left + window.scrollX + (rect.width / 2) - (dropdownWidth / 2);
-                let topPos = rect.top + window.scrollY + rect.height + 6;
+                let topPos  = rect.top  + window.scrollY + rect.height + 6;
 
                 if (rect.bottom + 150 > window.innerHeight) {
                     topPos = rect.top + window.scrollY - 150 - 6;
                 }
 
-                dropdown.style.left = leftPos + 'px';
-                dropdown.style.top = topPos + 'px';
+                dropdown.style.left    = leftPos + 'px';
+                dropdown.style.top     = topPos  + 'px';
                 dropdown.style.display = 'block';
             });
         });
@@ -208,12 +227,8 @@
             }
         });
 
-        window.addEventListener('resize', function() {
-            if (dropdown) dropdown.style.display = 'none';
-        });
-        window.addEventListener('scroll', function() {
-            if (dropdown) dropdown.style.display = 'none';
-        });
+        window.addEventListener('resize', function() { if (dropdown) dropdown.style.display = 'none'; });
+        window.addEventListener('scroll', function() { if (dropdown) dropdown.style.display = 'none'; });
     });
 </script>
 @endpush

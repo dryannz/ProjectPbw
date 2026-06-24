@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/templatemo-crypto-style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/templatemo-crypto-pages.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/templatemo-crypto-dashboard.css') }}"> {{-- ← TAMBAHKAN INI --}}
+    <link rel="stylesheet" href="{{ asset('css/templatemo-crypto-dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style-custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/new-style.css') }}">
     <script src="https://kit.fontawesome.com/84fd8ce536.js" crossorigin="anonymous" onerror="fallbackFontAwesome()"></script>
@@ -24,31 +24,44 @@
 </head>
 
 <body>
-    {{-- Tombol hamburger untuk mobile --}}
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
         <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span></span><span></span><span></span>
         </div>
     </button>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+    @php
+    $jabatan = strtolower(trim(auth()->user()->jabatan ?? ''));
+    @endphp
+
     <div class="dashboard">
 
-        {{-- ===================== SIDEBAR ===================== --}}
         <aside class="sidebar" id="sidebar">
 
-            {{-- Logo --}}
             <div class="logo">
                 @php $logoUrl = asset('images/logoYoko.png'); @endphp
-
                 <div class="logo-icon logo-icon-custom"
                     style="background-image: url('{{ $logoUrl }}'); background-size: 30px; background-position: center; background-repeat: no-repeat;">
                 </div>
                 <span class="logo-text">PT Yoko Fastener</span>
             </div>
+
+            <!-- {{-- Badge jabatan --}}
+            <div style="padding: 0 16px 12px; margin-top: -4px;">
+                <span style="
+                    display: inline-block;
+                    font-size: 11px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: .05em;
+                    padding: 3px 10px;
+                    border-radius: 999px;
+                    background: var(--accent, #3b82f6);
+                    color: #fff;
+                ">{{ auth()->user()->jabatan }}</span>
+            </div> -->
 
             {{-- Main Menu --}}
             <nav class="nav-section">
@@ -63,6 +76,7 @@
             {{-- Data Master --}}
             <nav class="nav-section">
                 <div class="nav-label">Data Master</div>
+
                 <a href="{{ route('petugas.index') }}"
                     class="nav-item {{ request()->routeIs('petugas.*') ? 'active' : '' }}">
                     <i class="fa-solid fa-users"></i>
@@ -85,6 +99,7 @@
             {{-- Data Transaksional --}}
             <nav class="nav-section">
                 <div class="nav-label">Data Transaksional</div>
+
                 <a href="{{ route('purchaseorder.index') }}"
                     class="nav-item {{ request()->routeIs('purchaseorder.*') ? 'active' : '' }}">
                     <i class="fa-solid fa-receipt"></i>
@@ -104,8 +119,7 @@
                 </a>
             </nav>
 
-
-            {{-- Footer Sidebar: Theme Toggle + Logout --}}
+            {{-- Footer Sidebar --}}
             <div class="sidebar-footer">
                 <div class="theme-toggle">
                     <div class="theme-toggle-label">
@@ -115,7 +129,6 @@
                     <div class="theme-switch" id="themeSwitch"></div>
                 </div>
 
-                {{-- PERUBAHAN: logout pakai form POST Laravel, bukan href --}}
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="logout-btn">
@@ -125,14 +138,10 @@
                 </form>
             </div>
         </aside>
-        {{-- ===================== END SIDEBAR ===================== --}}
 
-        {{-- ===================== KONTEN UTAMA ===================== --}}
-        {{-- Setiap halaman (petugas, barang, dll) akan muncul di sini --}}
         <main class="main-content">
             @yield('content')
         </main>
-        {{-- ===================== END KONTEN UTAMA ===================== --}}
 
     </div>
 

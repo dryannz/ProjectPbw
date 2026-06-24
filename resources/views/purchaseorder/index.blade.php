@@ -4,6 +4,10 @@
 @section('page-title', 'Manajemen Daftar Purchase Order')
 @section('page-subtitle', 'Daftar purchase order yang ada di PT Yoko Fastener')
 
+@php
+    $isHrd = str_contains(strtolower(trim(auth()->user()->jabatan ?? '')), 'hrd');
+@endphp
+
 @section('content')
 <div class="header">
     <div class="header-left">
@@ -29,11 +33,15 @@
     </div>
 </div>
 <div class="container-fluid">
+
+    {{-- Tombol Tambah: disembunyikan untuk HRD --}}
+    @if(!$isHrd)
     <div class="section-header">
         <a href="{{ route('purchaseorder.create') }}" class="btn-add">
             + Tambah Purchase Order
         </a>
     </div>
+    @endif
 
     <div class="card">
         <div class="card-body">
@@ -45,7 +53,10 @@
                             <th class="col-name">Nama Perusahaan</th>
                             <th class="col-date">Tanggal Order</th>
                             <th class="col-date">Schedule Delivery</th>
+                            {{-- Kolom Aksi hanya tampil untuk non-HRD --}}
+                            @if(!$isHrd)
                             <th class="col-action">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -59,6 +70,7 @@
                             </td>
                             <td class="cell-date">{{ $po->tgl_order->format('d-m-Y') }}</td>
                             <td class="cell-date">{{ $po->schedule_delivery->format('d-m-Y') }}</td>
+                            @if(!$isHrd)
                             <td class="cell-action">
                                 <div class="action-links">
                                     <a href="{{ route('purchaseorder.edit', $po->no_order) }}" class="link-edit">Edit</a>
@@ -70,23 +82,23 @@
                                         onsubmit="return confirm('Yakin ingin menghapus Purchase Order ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="link-delete" 
+                                        <button type="submit" class="link-delete"
                                         style="background:none; border:none; cursor:pointer; padding:0; font-size:inherit; font-family:inherit; color:#c20404ff;">
                                             Hapus
                                         </button>
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="empty-message">Belum ada data purchase order.</td>
+                            <td colspan="{{ $isHrd ? 4 : 5 }}" class="empty-message">Belum ada data purchase order.</td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
 
-                {{-- Pagination --}}
                 <div class="table-footer">
                     <div class="table-info">
                         Showing {{ $purchaseOrders->firstItem() ?? 0 }}

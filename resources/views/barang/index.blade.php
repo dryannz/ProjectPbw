@@ -4,6 +4,10 @@
 @section('page-title', 'Manajemen Barang')
 @section('page-subtitle', 'Daftar barang yang ada di PT Yoko Fastener')
 
+@php
+    $isHrd = str_contains(strtolower(trim(auth()->user()->jabatan ?? '')), 'hrd');
+@endphp
+
 @section('content')
 <div class="header">
     <div class="header-left">
@@ -38,10 +42,12 @@
 
     <div class="container-fluid">
 
-        {{-- Tombol Tambah --}}
+        {{-- Tombol Tambah: disembunyikan untuk HRD --}}
+        @if(!$isHrd)
         <div class="section-header">
             <a href="{{ route('barang.create') }}" class="btn-add">+ Tambah Barang</a>
         </div>
+        @endif
 
         <div class="card">
             <div class="card-body">
@@ -53,7 +59,10 @@
                                 <th class="col-name">Ukuran</th>
                                 <th class="col-position">Ukuran Tamu</th>
                                 <th class="col-position">Harga Satuan</th>
+                                {{-- Kolom Aksi hanya tampil untuk non-HRD --}}
+                                @if(!$isHrd)
                                 <th class="col-action">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -69,13 +78,12 @@
                                     <td class="cell-position">
                                         Rp {{ number_format($barang->harga, 0, ',', '.') }}
                                     </td>
+                                    @if(!$isHrd)
                                     <td class="cell-action">
                                         <div class="action-links">
                                             <a href="{{ route('barang.edit', $barang->idbarang) }}"
                                                class="link-edit">Edit</a>
                                             <span style="color:#ccc;margin:0 5px;">|</span>
-
-                                            {{-- Form DELETE (pengganti link barang-hapus.php?idbarang=...) --}}
                                             <form action="{{ route('barang.destroy', $barang->idbarang) }}"
                                                   method="POST"
                                                   style="display:inline;"
@@ -89,16 +97,16 @@
                                             </form>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="empty-message">Belum ada data barang.</td>
+                                    <td colspan="{{ $isHrd ? 4 : 5 }}" class="empty-message">Belum ada data barang.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
 
-                    {{-- Pagination Laravel (menggantikan logika sliding window manual) --}}
                     <div class="table-footer">
                         <div class="table-info">
                             Showing {{ $barangs->firstItem() ?? 0 }}
@@ -106,14 +114,12 @@
                             of {{ $barangs->total() }} entries
                         </div>
                         <div class="pagination">
-                            {{-- Previous --}}
                             @if($barangs->onFirstPage())
                                 <span class="btn-pag disabled">&larr; Back</span>
                             @else
                                 <a class="btn-pag" href="{{ $barangs->previousPageUrl() }}">&larr; Back</a>
                             @endif
 
-                            {{-- Nomor halaman --}}
                             @foreach($barangs->getUrlRange(1, $barangs->lastPage()) as $page => $url)
                                 @if($page == $barangs->currentPage())
                                     <a class="btn-pag active" href="{{ $url }}">{{ $page }}</a>
@@ -122,7 +128,6 @@
                                 @endif
                             @endforeach
 
-                            {{-- Next --}}
                             @if($barangs->hasMorePages())
                                 <a class="btn-pag" href="{{ $barangs->nextPageUrl() }}">Next &rarr;</a>
                             @else
@@ -139,7 +144,6 @@
 
 @push('scripts')
 <script>
-    // Client-side search (sama seperti di native)
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('searchInput');
         const rows        = document.querySelectorAll('#barangTable tbody tr');

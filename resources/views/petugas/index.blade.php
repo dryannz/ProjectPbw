@@ -4,6 +4,10 @@
 @section('page-title', 'Manajemen Petugas')
 @section('page-subtitle', 'Daftar petugas yang ada di PT Yoko Fastener')
 
+@php
+    $isHrd = str_contains(strtolower(trim(auth()->user()->jabatan ?? '')), 'hrd');
+@endphp
+
 @section('content')
 <div class="header">
     <div class="header-left">
@@ -37,9 +41,12 @@
 
     <div class="container-fluid">
 
+        {{-- Tombol Tambah: disembunyikan untuk HRD --}}
+        @if(!$isHrd)
         <div class="section-header">
             <a href="{{ route('petugas.create') }}" class="btn-add">+ Tambah Petugas</a>
         </div>
+        @endif
 
         <div class="card">
             <div class="card-body">
@@ -50,7 +57,10 @@
                                 <th class="col-id">ID</th>
                                 <th class="col-name">Nama Petugas</th>
                                 <th class="col-position">Jabatan</th>
+                                {{-- Kolom Aksi hanya tampil untuk non-HRD --}}
+                                @if(!$isHrd)
                                 <th class="col-action">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -63,13 +73,12 @@
                                         </div>
                                     </td>
                                     <td class="cell-position">{{ $p->jabatan }}</td>
+                                    @if(!$isHrd)
                                     <td class="cell-action">
                                         <div class="action-links">
                                             <a href="{{ route('petugas.edit', $p->idpetugas) }}"
                                                class="link-edit">Edit</a>
                                             <span style="color:#ccc;margin:0 5px;">|</span>
-
-                                            {{-- Form DELETE — menggantikan link petugas-hapus.php?idpetugas=... --}}
                                             <form action="{{ route('petugas.destroy', $p->idpetugas) }}"
                                                   method="POST"
                                                   style="display:inline;"
@@ -83,16 +92,16 @@
                                             </form>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="empty-message">Belum ada data petugas.</td>
+                                    <td colspan="{{ $isHrd ? 3 : 4 }}" class="empty-message">Belum ada data petugas.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
 
-                    {{-- Pagination Laravel --}}
                     <div class="table-footer">
                         <div class="table-info">
                             Showing {{ $petugas->firstItem() ?? 0 }}

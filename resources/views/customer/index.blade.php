@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Manajemen Customer')
 
+@php
+    $isHrd = str_contains(strtolower(trim(auth()->user()->jabatan ?? '')), 'hrd');
+@endphp
+
 @section('content')
 <div class="header">
     <div class="header-left">
@@ -31,9 +35,12 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    {{-- Tombol Tambah: disembunyikan untuk HRD --}}
+    @if(!$isHrd)
     <div class="section-header">
         <a href="{{ route('customer.create') }}" class="btn-add">+ Tambah Customer</a>
     </div>
+    @endif
 
     <div class="card">
         <div class="card-body">
@@ -44,7 +51,10 @@
                             <th class="col-id">ID</th>
                             <th class="col-name">Nama Customer</th>
                             <th class="col-position">Alamat</th>
+                            {{-- Kolom Aksi hanya tampil untuk non-HRD --}}
+                            @if(!$isHrd)
                             <th class="col-action">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +67,7 @@
                                 </div>
                             </td>
                             <td class="cell-position">{{ $c->alamat }}</td>
+                            @if(!$isHrd)
                             <td class="cell-action">
                                 <div class="action-links">
                                     <a href="{{ route('customer.edit', $c->idcustomer) }}" class="link-edit">Edit</a>
@@ -73,42 +84,42 @@
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @empty
-                        <tr><td colspan="4" class="empty-message">Belum ada data customer.</td></tr>
+                        <tr><td colspan="{{ $isHrd ? 3 : 4 }}" class="empty-message">Belum ada data customer.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
 
-                {{-- Pagination Laravel --}}
-                    <div class="table-footer">
-                        <div class="table-info">
-                            Showing {{ $customer->firstItem() ?? 0 }}
-                            to {{ $customer->lastItem() ?? 0 }}
-                            of {{ $customer->total() }} entries
-                        </div>
-                        <div class="pagination">
-                            @if($customer->onFirstPage())
-                                <span class="btn-pag disabled">&larr; Back</span>
-                            @else
-                                <a class="btn-pag" href="{{ $customer->previousPageUrl() }}">&larr; Back</a>
-                            @endif
-
-                            @foreach($customer->getUrlRange(1, $customer->lastPage()) as $page => $url)
-                                @if($page == $customer->currentPage())
-                                    <a class="btn-pag active" href="{{ $url }}">{{ $page }}</a>
-                                @else
-                                    <a class="btn-pag page-num" href="{{ $url }}">{{ $page }}</a>
-                                @endif
-                            @endforeach
-
-                            @if($customer->hasMorePages())
-                                <a class="btn-pag" href="{{ $customer->nextPageUrl() }}">Next &rarr;</a>
-                            @else
-                                <span class="btn-pag disabled">Next &rarr;</span>
-                            @endif
-                        </div>
+                <div class="table-footer">
+                    <div class="table-info">
+                        Showing {{ $customer->firstItem() ?? 0 }}
+                        to {{ $customer->lastItem() ?? 0 }}
+                        of {{ $customer->total() }} entries
                     </div>
+                    <div class="pagination">
+                        @if($customer->onFirstPage())
+                            <span class="btn-pag disabled">&larr; Back</span>
+                        @else
+                            <a class="btn-pag" href="{{ $customer->previousPageUrl() }}">&larr; Back</a>
+                        @endif
+
+                        @foreach($customer->getUrlRange(1, $customer->lastPage()) as $page => $url)
+                            @if($page == $customer->currentPage())
+                                <a class="btn-pag active" href="{{ $url }}">{{ $page }}</a>
+                            @else
+                                <a class="btn-pag page-num" href="{{ $url }}">{{ $page }}</a>
+                            @endif
+                        @endforeach
+
+                        @if($customer->hasMorePages())
+                            <a class="btn-pag" href="{{ $customer->nextPageUrl() }}">Next &rarr;</a>
+                        @else
+                            <span class="btn-pag disabled">Next &rarr;</span>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>
